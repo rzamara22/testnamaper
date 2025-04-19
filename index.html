@@ -3,50 +3,22 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Autocomplete Dropdown</title>
+  <title>Autocomplete</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-
     input {
-      width: 95%;
-      padding: 10px;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    li {
+      width: 90%;
       padding: 8px;
-      cursor: pointer;
-    }
-
-    li:hover {
-      background-color: #f0f0f0;
     }
   </style>
 </head>
 
 <body>
-  <h2>Nama Instansi / Perusahaan</h2>
-  <input type="text" id="search" placeholder="Ketik Nama Instansi / Perusahaaan..." oninput="filter(this.value)">
+  <input type="text" id="search" placeholder="Cari item..." oninput="filter(this.value)">
   <ul id="results"></ul>
 
   <script>
     let items = [];
-    // Ganti URL ini dengan URL Google Apps Script kamu
-    const dataURL = "https://script.google.com/macros/s/AKfycbwg3TX_oEplFqrgzE-d-Cn0uCHW0KcN-2o8qKJed5CsHmLPuULeJ2pHCCDbRyuj3qQy/exec";
-    fetch(dataURL)
+    fetch("https://script.google.com/macros/s/AKfycbwg3TX_oEplFqrgzE-d-Cn0uCHW0KcN-2o8qKJed5CsHmLPuULeJ2pHCCDbRyuj3qQy/exec")
       .then(res => res.json())
       .then(data => {
         items = data;
@@ -57,14 +29,10 @@
       list.innerHTML = "";
       items
         .filter(item => item.toLowerCase().includes(text.toLowerCase()))
-        .slice(0, 10)
+        .slice(0, 10) // batasi hasil maksimal
         .forEach(item => {
           let li = document.createElement("li");
           li.textContent = item;
-          li.onclick = () => {
-            document.getElementById("search").value = item;
-            list.innerHTML = "";
-          };
           list.appendChild(li);
         });
     }
