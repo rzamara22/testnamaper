@@ -1,42 +1,26 @@
-<!DOCTYPE html>
-<html>
+<script>
+  let items = [];
 
-<head>
-  <meta charset="utf-8">
-  <title>Autocomplete</title>
-  <style>
-    input {
-      width: 90%;
-      padding: 8px;
-    }
-  </style>
-</head>
+  fetch("https://script.google.com/macros/s/AKfycbwg3TX_oEplFqrgzE-d-Cn0uCHW0KcN-2o8qKJed5CsHmLPuULeJ2pHCCDbRyuj3qQy/exec")
+    .then(res => res.json())
+    .then(data => {
+      items = data;
+    });
 
-<body>
-  <input type="text" id="search" placeholder="Cari item..." oninput="filter(this.value)">
-  <ul id="results"></ul>
-
-  <script>
-    let items = [];
-    fetch("https://script.google.com/macros/s/AKfycbwg3TX_oEplFqrgzE-d-Cn0uCHW0KcN-2o8qKJed5CsHmLPuULeJ2pHCCDbRyuj3qQy/exec")
-      .then(res => res.json())
-      .then(data => {
-        items = data;
+  function filter(text) {
+    let list = document.getElementById("results");
+    list.innerHTML = "";
+    items
+      .filter(item => item.toLowerCase().includes(text.toLowerCase()))
+      .slice(0, 10) // batasi 10 hasil
+      .forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = item;
+        li.onclick = () => {
+          document.getElementById("search").value = item;
+          list.innerHTML = "";
+        };
+        list.appendChild(li);
       });
-
-    function filter(text) {
-      let list = document.getElementById("results");
-      list.innerHTML = "";
-      items
-        .filter(item => item.toLowerCase().includes(text.toLowerCase()))
-        .slice(0, 10) // batasi hasil maksimal
-        .forEach(item => {
-          let li = document.createElement("li");
-          li.textContent = item;
-          list.appendChild(li);
-        });
-    }
-  </script>
-</body>
-
-</html>
+  }
+</script>
