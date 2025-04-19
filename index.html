@@ -1,26 +1,74 @@
-<script>
-  let items = [];
+<!DOCTYPE html>
+<html>
 
-  fetch("https://script.google.com/macros/s/AKfycbwg3TX_oEplFqrgzE-d-Cn0uCHW0KcN-2o8qKJed5CsHmLPuULeJ2pHCCDbRyuj3qQy/exec")
-    .then(res => res.json())
-    .then(data => {
-      items = data;
-    });
+<head>
+  <meta charset="utf-8">
+  <title>Autocomplete Dropdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
 
-  function filter(text) {
-    let list = document.getElementById("results");
-    list.innerHTML = "";
-    items
-      .filter(item => item.toLowerCase().includes(text.toLowerCase()))
-      .slice(0, 10) // batasi 10 hasil
-      .forEach(item => {
-        let li = document.createElement("li");
-        li.textContent = item;
-        li.onclick = () => {
-          document.getElementById("search").value = item;
-          list.innerHTML = "";
-        };
-        list.appendChild(li);
+    input {
+      width: 95%;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    li {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    li:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Nama Instansi / Perusahaan</h2>
+  <input type="text" id="search" placeholder="Ketik Nama Instansi / Perusahaaan..." oninput="filter(this.value)">
+  <ul id="results"></ul>
+
+  <script>
+    let items = [];
+    // Ganti URL ini dengan URL Google Apps Script kamu
+    const dataURL = "https://script.google.com/macros/s/AKfycbwg3TX_oEplFqrgzE-d-Cn0uCHW0KcN-2o8qKJed5CsHmLPuULeJ2pHCCDbRyuj3qQy/exec";
+    fetch(dataURL)
+      .then(res => res.json())
+      .then(data => {
+        items = data;
       });
-  }
-</script>
+
+    function filter(text) {
+      let list = document.getElementById("results");
+      list.innerHTML = "";
+      items
+        .filter(item => item.toLowerCase().includes(text.toLowerCase()))
+        .slice(0, 10)
+        .forEach(item => {
+          let li = document.createElement("li");
+          li.textContent = item;
+          li.onclick = () => {
+            document.getElementById("search").value = item;
+            list.innerHTML = "";
+          };
+          list.appendChild(li);
+        });
+    }
+  </script>
+</body>
+
+</html>
